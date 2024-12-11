@@ -1,26 +1,16 @@
 'use client';
+import './page.css';
 import { LoadingSpinner } from '@/components/common/LoadingSpinner/LoadingSpinner';
 import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { mockMatters } from '../api/mockData';
 import { mockClientDetailsList } from '../api/mockData';
-import './page.css';
-
-interface Client {
-  clientName: string;
-  clientDescription: string;
-  clientCode: string;
-  inceptionDate: string;
-}
+import { ContactsTable, MattersTable } from './Components/Tables/Tables';
 
 export default function ClientDetailPage() {
   const params = useParams();
   const router = useRouter();
-  const [client, setClient] = useState<Client | null>(null);
-
-  const handleRowClick = (matterCode) => {
-    alert(`Redirecting to details for matter: ${matterCode}`);
-  };
+  const [client, setClient] = useState<any | null>(null);
 
   useEffect(() => {
     const clientCode = params.clientCode as string;
@@ -74,57 +64,12 @@ export default function ClientDetailPage() {
         </div>
         <div>
           <h2 className="section-title">Contacts</h2>
-          <table className="table">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Phone</th>
-              </tr>
-            </thead>
-            <tbody>
-              {client.contacts.map((contact, index) => (
-                <tr key={index}>
-                  <td>{contact.name}</td>
-                  <td>{contact.email}</td>
-                  <td>{contact.phone}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <ContactsTable contacts={client.contacts} />
         </div>
       </div>
       <div className="detail-card">
         <h2 className="section-title">Matters</h2>
-        <table className="table">
-          <thead>
-            <tr>
-              <th>Matter Code</th>
-              <th>Matter Name</th>
-              <th>Inception Date</th>
-            </tr>
-          </thead>
-          <tbody>
-            {mockMatters.map((matter, index) => (
-              <tr
-                key={index}
-                onClick={() => handleRowClick(matter.code)}
-                className="table-row-clickable"
-              >
-                <td>{matter.code}</td>
-                <td>{matter.name}</td>
-                <td>{matter.date}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        <div className="pagination-container">
-          <p>6 results of 12</p>
-          <div>
-            <button className="button">&lt; Previous</button>
-            <button className="button">Next &gt;</button>
-          </div>
-        </div>
+        <MattersTable matters={mockMatters} />
       </div>
     </div>
   );

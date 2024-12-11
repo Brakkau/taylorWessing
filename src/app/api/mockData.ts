@@ -201,7 +201,7 @@ export const mockClientDetailsList = [
       },
     ],
   },
-];  
+];
 
 export   const mockMatters = [
   { code: 'AB232', name: 'Lorem ipsum dolor sit amet', date: '23rd June 2012' },

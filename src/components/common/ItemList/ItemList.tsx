@@ -1,15 +1,25 @@
 'use client';
 
-import React from 'react';
-import { Item } from '../Item/Item';
-import { SearchBar } from '../SearchBar/SearchBar';
-import { LoadingSpinner } from '@/components/common/LoadingSpinner/LoadingSpinner';
-import { ErrorMessage } from '@/components/common/ErrorMessage/ErrorMessage';
-// import { useClientList } from './Hooks/useClientList';
-import './ItemList.css';
-import { Table } from '../Table/Table';
+import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { Column, Table } from '../Table/Table';
 
 export const ItemList: React.FC = ({ clients }) => {
+    const router = useRouter();
+    const [currentPage, setCurrentPage] = useState(1);
+    const rowsPerPage = 10;
+    const totalPages = Math.ceil(clients.length / rowsPerPage);
+
+    const columns: Column<any>[] = [
+      { key: 'clientName', header: 'Client Name', sortable: true },
+      {
+        key: 'clientDescription',
+        header: 'Client Description',
+        sortable: true,
+      },
+      { key: 'clientCode', header: 'Client Code', sortable: true },
+      { key: 'inceptionDate', header: 'Inception Date', sortable: true },
+    ];
   //   const {
   //     filteredPosts,
   //     loading,
@@ -44,7 +54,17 @@ export const ItemList: React.FC = ({ clients }) => {
           </p>
         ) : (
           <>
-            <Table data={clients} />
+            <Table
+              data={clients}
+              columns={columns}
+              onRowClick={(client) => router.push(`/${client.clientCode}`)}
+              enablePagination={true}
+              enableSort={true}
+              rowsPerPage={rowsPerPage}
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={setCurrentPage}
+            />
           </>
         )}
       </div>

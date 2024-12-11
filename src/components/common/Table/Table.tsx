@@ -1,40 +1,43 @@
 import React, { useState } from 'react';
 import './Table.css';
-import { useParams, useRouter } from 'next/navigation';
 
-interface Client {
-  clientName: string;
-  clientDescription: string;
-  clientCode: string;
-  inceptionDate: string;
+export interface Column<T> {
+  key: keyof T;
+  header: string;
+  sortable?: boolean;
 }
 
-interface TableProps {
-  data: Client[];
+interface TableProps<T> {
+  data: T[];
+  columns: Column<T>[];
+  onRowClick?: (item: T) => void;
+  enablePagination?: boolean;
+  enableSort?: boolean;
+  rowsPerPage?: number;
+  currentPage?: number;
+  totalPages?: number;
+  onPageChange?: (page: number) => void;
+  customSort?: (a: T, b: T, column: keyof T, order: 'asc' | 'desc') => number;
 }
 
-export const Table: React.FC<TableProps> = ({ data }) => {
-  const router = useRouter();
-  const [currentPage, setCurrentPage] = useState(1);
-  const [rowsPerPage] = useState(10);
-  const [sortColumn, setSortColumn] = useState<keyof Client>('clientName');
+export const Table = <T,>({
+  data,
+  columns,
+  onRowClick,
+  enablePagination = false,
+  enableSort = false,
+  rowsPerPage = 10,
+  currentPage = 1,
+  totalPages,
+  onPageChange,
+  customSort,
+}: TableProps<T>) => {
+  const [sortColumn, setSortColumn] = useState<keyof T | null>(null);
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
 
-  const totalPages = Math.ceil(data.length / rowsPerPage);
+  const handleSort = (column: keyof T) => {
+    if (!enableSort) return;
 
-  const sortedData = [...data].sort((a, b) => {
-    const aValue = a[sortColumn].toString().toLowerCase();
-    const bValue = b[sortColumn].toString().toLowerCase();
-
-    if (aValue < bValue) return sortOrder === 'asc' ? -1 : 1;
-    if (aValue > bValue) return sortOrder === 'asc' ? 1 : -1;
-    return 0;
-  });
-
-  const startIndex = (currentPage - 1) * rowsPerPage;
-  const paginatedData = sortedData.slice(startIndex, startIndex + rowsPerPage);
-
-  const handleSort = (column: keyof Client) => {
     if (sortColumn === column) {
       setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
     } else {
@@ -43,80 +46,84 @@ export const Table: React.FC<TableProps> = ({ data }) => {
     }
   };
 
-  const handleRowClick = (client: Client) => {
-    router.push(`/${client.clientCode}`)
-  };
+  const sortedData =
+    enableSort && sortColumn
+      ? [...data].sort((a, b) => {
+          if (customSort) {
+            return customSort(a, b, sortColumn, sortOrder);
+          }
+
+          const aValue = String(a[sortColumn]).toLowerCase();
+          const bValue = String(b[sortColumn]).toLowerCase();
+
+          if (aValue < bValue) return sortOrder === 'asc' ? -1 : 1;
+          if (aValue > bValue) return sortOrder === 'asc' ? 1 : -1;
+          return 0;
+        })
+      : data;
+
+  const displayData = enablePagination
+    ? sortedData.slice(
+        (currentPage - 1) * rowsPerPage,
+        currentPage * rowsPerPage
+      )
+    : sortedData;
 
   return (
-    <div>
-      <h2>Search Results</h2>
-      <table>
+    <div className="table-container">
+      <table className="table">
         <thead>
           <tr>
-            <th onClick={() => handleSort('clientName')}>
-              Client Name{' '}
-              {sortColumn === 'clientName'
-                ? sortOrder === 'asc'
-                  ? '▲'
-                  : '▼'
-                : ''}
-            </th>
-            <th onClick={() => handleSort('clientDescription')}>
-              Client Description{' '}
-              {sortColumn === 'clientDescription'
-                ? sortOrder === 'asc'
-                  ? '▲'
-                  : '▼'
-                : ''}
-            </th>
-            <th onClick={() => handleSort('clientCode')}>
-              Client Code{' '}
-              {sortColumn === 'clientCode'
-                ? sortOrder === 'asc'
-                  ? '▲'
-                  : '▼'
-                : ''}
-            </th>
-            <th onClick={() => handleSort('inceptionDate')}>
-              Inception Date{' '}
-              {sortColumn === 'inceptionDate'
-                ? sortOrder === 'asc'
-                  ? '▲'
-                  : '▼'
-                : ''}
-            </th>
+            {columns.map((column) => (
+              <th
+                key={String(column.key)}
+                onClick={() => column.sortable && handleSort(column.key)}
+                className={column.sortable ? 'sortable' : ''}
+              >
+                {column.header}
+                {enableSort && sortColumn === column.key && (
+                  <span className="sort-indicator">
+                    {sortOrder === 'asc' ? ' ▲' : ' ▼'}
+                  </span>
+                )}
+              </th>
+            ))}
           </tr>
         </thead>
         <tbody>
-          {paginatedData.map((client, index) => (
-            <tr key={index} onClick={() => handleRowClick(client)}>
-              <td>{client.clientName}</td>
-              <td>{client.clientDescription}</td>
-              <td>{client.clientCode}</td>
-              <td>{client.inceptionDate}</td>
+          {displayData.map((item, index) => (
+            <tr
+              key={index}
+              onClick={() => onRowClick && onRowClick(item)}
+              className={onRowClick ? 'clickable' : ''}
+            >
+              {columns.map((column) => (
+                <td key={String(column.key)}>{String(item[column.key])}</td>
+              ))}
             </tr>
           ))}
         </tbody>
       </table>
-      <div className="pagination">
-        <button
-          onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-          disabled={currentPage === 1}
-        >
-          Previous
-        </button>
-        <span>
-          Page {currentPage} of {totalPages}
-        </span>
-        <button
-          onClick={() =>
-            setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-          }
-          disabled={currentPage === totalPages}
-        >
-          Next
-        </button>
-      </div>
+
+      {enablePagination && onPageChange && (
+        <div className="pagination">
+          <button
+            onClick={() => onPageChange(currentPage - 1)}
+            disabled={currentPage === 1}
+          >
+            Previous
+          </button>
+          <span>
+            Page {currentPage} of {totalPages}
+          </span>
+          <button
+            onClick={() => onPageChange(currentPage + 1)}
+            disabled={currentPage === totalPages}
+          >
+            Next
+          </button>
+        </div>
+      )}
     </div>
   );
-};
+}
