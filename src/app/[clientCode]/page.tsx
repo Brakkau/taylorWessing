@@ -1,8 +1,10 @@
 'use client';
 import { LoadingSpinner } from '@/components/common/LoadingSpinner/LoadingSpinner';
-import { Table } from '@/components/common/Table/Table';
 import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { mockMatters } from '../api/mockData';
+import { mockClientDetailsList } from '../api/mockData';
+import './page.css';
 
 interface Client {
   clientName: string;
@@ -11,93 +13,23 @@ interface Client {
   inceptionDate: string;
 }
 
-const mockClientData = [
-  {
-    clientName: 'Client Number 1',
-    clientDescription: 'Client Number 1: Descriptive Text',
-    clientCode: 'Client1Code',
-    inceptionDate: '23rd June 2010',
-  },
-  {
-    clientName: 'Client Number 2',
-    clientDescription: 'Client Number 2: Descriptive Text',
-    clientCode: 'Client2Code',
-    inceptionDate: '2nd Dec 2016',
-  },
-  {
-    clientName: 'Client Number 3',
-    clientDescription: 'Client Number 3: Descriptive Text',
-    clientCode: 'Client3Code',
-    inceptionDate: '1st June 2008',
-  },
-  {
-    clientName: 'Client Number 4',
-    clientDescription: 'Client Number 4: Descriptive Text',
-    clientCode: 'Client4Code',
-    inceptionDate: '23rd June 2010',
-  },
-  {
-    clientName: 'Client Number 5',
-    clientDescription: 'Client Number 5: Descriptive Text',
-    clientCode: 'Client5Code',
-    inceptionDate: '23rd June 2010',
-  },
-  {
-    clientName: 'Client Number 6',
-    clientDescription: 'Client Number 6: Descriptive Text',
-    clientCode: 'Client6Code',
-    inceptionDate: '23rd June 2010',
-  },
-  {
-    clientName: 'Client Number 7',
-    clientDescription: 'Client Number 7: Descriptive Text',
-    clientCode: 'Client7Code',
-    inceptionDate: '23rd June 2010',
-  },
-  {
-    clientName: 'Client Number 8',
-    clientDescription: 'Client Number 8: Descriptive Text',
-    clientCode: 'Client8Code',
-    inceptionDate: '23rd June 2010',
-  },
-  {
-    clientName: 'Client Number 9',
-    clientDescription: 'Client Number 9: Descriptive Text',
-    clientCode: 'Client9Code',
-    inceptionDate: '23rd June 2010',
-  },
-  {
-    clientName: 'Client Number 10',
-    clientDescription: 'Client Number 10: Descriptive Text',
-    clientCode: 'Client10Code',
-    inceptionDate: '23rd June 2010',
-  },
-  {
-    clientName: 'Client Number 11',
-    clientDescription: 'Client Number 11: Descriptive Text',
-    clientCode: 'Client11Code',
-    inceptionDate: '23rd June 2010',
-  },
-  {
-    clientName: 'Client Number 12',
-    clientDescription: 'Client Number 12: Descriptive Text',
-    clientCode: 'Client12Code',
-    inceptionDate: '23rd June 2010',
-  },
-];
-
 export default function ClientDetailPage() {
   const params = useParams();
   const router = useRouter();
   const [client, setClient] = useState<Client | null>(null);
 
-  useEffect(() => {
-    // Simulate fetching client data
-    const clientCode = params.clientCode as string;
-    const foundClient = mockClientData.find((c) => c.clientCode === clientCode);
+  const handleRowClick = (matterCode) => {
+    alert(`Redirecting to details for matter: ${matterCode}`);
+  };
 
-    if (foundClient) {
-      setClient(foundClient);
+  useEffect(() => {
+    const clientCode = params.clientCode as string;
+    const client = mockClientDetailsList.find(
+      (c) => c.clientCode === clientCode
+    );
+
+    if (client) {
+      setClient(client);
     } else {
       router.push('/');
     }
@@ -108,15 +40,92 @@ export default function ClientDetailPage() {
   }
 
   return (
-    <div className="container mx-auto p-4">
-      <button
-        onClick={() => router.back()}
-        className="mb-4 px-4 py-2 bg-gray-100 rounded-lg"
-      >
-        ← Back
-      </button>
-
-      <Table data={[client]} />
+    <div className="client-detail-container">
+      <div className="detail-card">
+        <header className="header">
+          <h1 className="page-title">Client Details</h1>
+          <button className="button">&lt; Back to Results</button>
+        </header>
+        <div className="client-info-grid">
+          <div>
+            <h2 className="info-label">Client Name</h2>
+            <p>{client.clientName}</p>
+          </div>
+          <div>
+            <h2 className="info-label">Client Description</h2>
+            <p>{client.clientDescription}</p>
+          </div>
+          <div>
+            <h2 className="info-label">Inception Date</h2>
+            <p>{client.inceptionDate}</p>
+          </div>
+          <div>
+            <h2 className="info-label">Address</h2>
+            <p>
+              {client.address.line1}
+              <br />
+              {client.address.line2}
+              <br />
+              {client.address.city}, {client.address.county}
+              <br />
+              {client.address.postcode}
+            </p>
+          </div>
+        </div>
+        <div>
+          <h2 className="section-title">Contacts</h2>
+          <table className="table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+              </tr>
+            </thead>
+            <tbody>
+              {client.contacts.map((contact, index) => (
+                <tr key={index}>
+                  <td>{contact.name}</td>
+                  <td>{contact.email}</td>
+                  <td>{contact.phone}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div className="detail-card">
+        <h2 className="section-title">Matters</h2>
+        <table className="table">
+          <thead>
+            <tr>
+              <th>Matter Code</th>
+              <th>Matter Name</th>
+              <th>Inception Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            {mockMatters.map((matter, index) => (
+              <tr
+                key={index}
+                onClick={() => handleRowClick(matter.code)}
+                className="table-row-clickable"
+              >
+                <td>{matter.code}</td>
+                <td>{matter.name}</td>
+                <td>{matter.date}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <div className="pagination-container">
+          <p>6 results of 12</p>
+          <div>
+            <button className="button">&lt; Previous</button>
+            <button className="button">Next &gt;</button>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
