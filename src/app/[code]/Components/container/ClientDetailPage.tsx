@@ -15,6 +15,7 @@ import { Results } from '@/components/container/results/Results';
 import { Column } from '@/components/common/Table/Table';
 import { Header } from '@/components/common/Header/Header';
 import { formatDate } from '@/utils/formatDate';
+import { useMatterData } from '@/hooks/useMatterData';
 
 interface ClientDetailPageProps {
   clientData: Client;
@@ -23,6 +24,7 @@ interface ClientDetailPageProps {
 export const ClientDetailPage = ({ clientData }: ClientDetailPageProps) => {
   const router = useRouter();
   const [currentPage, setCurrentPage] = useState(1);
+  const [matterId, setMatterId] = useState<string | null>(null);
   const rowsPerPage = 10;
   const columnOrder = 'NAME';
   const sort = 'ASCENDING';
@@ -36,6 +38,10 @@ export const ClientDetailPage = ({ clientData }: ClientDetailPageProps) => {
     index,
     offset
   );
+
+    const { matterData } = useMatterData(
+      matterId
+    );
 
   if (loading) return <LoadingSpinner />;
   if (error) return <ErrorMessage message={error} onRetry={() => {}} />;
@@ -92,10 +98,13 @@ export const ClientDetailPage = ({ clientData }: ClientDetailPageProps) => {
             <>
               <Results
                 clients={matterList}
+                matterData={matterData}
                 currentPage={currentPage}
                 setCurrentPage={setCurrentPage}
                 rowsPerPage={rowsPerPage}
                 columns={columns}
+                rowOnClick='matter'
+                setMatterId={setMatterId}
               />
             </>
           )}

@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import './Table.css';
+import { Dispatch } from '@/types/types';
 
 export interface Column<T> {
   key: keyof T;
@@ -17,6 +18,7 @@ interface TableProps<T> {
   rowsPerPage?: number;
   currentPage?: number;
   customSort?: (a: T, b: T, column: keyof T, order: 'asc' | 'desc') => number;
+  setMatterId?: Dispatch;
 }
 
 export const Table = <T,>({
@@ -25,6 +27,7 @@ export const Table = <T,>({
   onRowClick,
   enableSort = false,
   customSort,
+  setMatterId,
 }: TableProps<T>) => {
   const [sortColumn, setSortColumn] = useState<keyof T | null>(null);
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
@@ -80,7 +83,11 @@ export const Table = <T,>({
           {sortedData.map((item, index) => (
             <tr
               key={index}
-              onClick={() => onRowClick && onRowClick(item)}
+              onClick={() => {
+                if (onRowClick) onRowClick(item);
+                if (setMatterId && 'matterId' in item)
+                  setMatterId(item.matterId);
+              }}
               className={onRowClick ? 'clickable' : ''}
             >
               {columns.map((column) => (
@@ -92,4 +99,4 @@ export const Table = <T,>({
       </table>
     </div>
   );
-}
+};

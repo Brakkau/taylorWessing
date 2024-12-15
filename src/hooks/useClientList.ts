@@ -38,7 +38,7 @@ export const useClientList = (searchTerm, columnOrder, sort, index, offset) => {
       setLoading(false);
     } catch (err) {
       setError('Failed to fetch clients. Please try again later.');
-      console.log(err);
+      console.error(err);
       setLoading(false);
     }
   };

@@ -2,6 +2,20 @@
 
 import { ItemList } from '@/components/common/ItemList/ItemList';
 import { Pagination } from '@/components/common/Pagination/Pagination';
+import { Column } from '@/components/common/Table/Table';
+import { Client, Dispatch } from '@/types/types';
+
+type ResultsProps<T> = {
+  clients: Client[];
+  currentPage: number;
+  setCurrentPage: (page: number) => void;
+  rowsPerPage: number;
+  columns: Column<T>[];
+  rowOnClick: () => void;
+  matterData?: any;
+  matterId?: string;
+  setMatterId?: Dispatch;
+};
 
 export const Results = ({
   clients,
@@ -9,8 +23,11 @@ export const Results = ({
   setCurrentPage,
   rowsPerPage,
   columns,
-}) => {
-  const handlePageChange = (page) => {
+  rowOnClick,
+  matterData,
+  setMatterId,
+}: ResultsProps) => {
+  const handlePageChange = (page: number) => {
     setCurrentPage(page);
   };
 
@@ -32,6 +49,9 @@ export const Results = ({
             clients={clients.results}
             rowsPerPage={rowsPerPage}
             columns={columns}
+            rowOnClick={rowOnClick}
+            setMatterId={setMatterId}
+            matterData={matterData}
           />
           <Pagination
             currentPage={currentPage}

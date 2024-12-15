@@ -67,3 +67,10 @@ export type UseListReturn = {
   handleSearch: (searchTerm: string) => void;
   fetchClients: () => Promise<void>;
 };
+
+interface Action {
+  type: string;
+  payload?: unknown;
+}
+
+export type Dispatch = (action: Action) => void;
