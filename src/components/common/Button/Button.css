@@ -1,0 +1,89 @@
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-weight: 500;
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
+  border: none;
+  outline: none;
+}
+
+/* Variants */
+.button--primary {
+  background-color: transparent;
+  color: #0f1c44;
+  border: 3px solid #0c8;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.button--primary:hover:not(:disabled) {
+  background-color: #0c8;
+  color: #0f1c44;
+  border-color: #0f1c44;
+}
+
+.button--secondary {
+  background-color: transparent;
+  color: #fff;
+  border: 3px solid #0c8;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.button--outline {
+  background-color: transparent;
+  border: 1px solid #e5e7eb;
+  color: #374151;
+}
+
+.button--outline:hover:not(:disabled) {
+  background-color: #f3f4f6;
+}
+
+.button--ghost {
+  background-color: transparent;
+  color: #374151;
+}
+
+.button--ghost:hover:not(:disabled) {
+  background-color: #f3f4f6;
+}
+
+/* Sizes */
+.button--sm {
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+}
+
+.button--md {
+  padding: 0.625rem 1.25rem;
+  font-size: 1rem;
+}
+
+.button--lg {
+  padding: 0.75rem 1.5rem;
+  font-size: 1.125rem;
+}
+
+/* States */
+.button--disabled,
+.button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.button--full-width {
+  width: 100%;
+}
+
+.button--loading {
+  position: relative;
+  cursor: wait;
+}
+
+/* Icons */
+.button__icon {
+  display: inline-flex;
+  align-items: center;
+}

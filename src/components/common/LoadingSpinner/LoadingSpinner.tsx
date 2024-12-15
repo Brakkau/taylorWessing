@@ -1,8 +1,10 @@
-export const LoadingSpinner: React.FC = () => (
-  <div role="status" aria-live="polite" className="loading-container">
-    <span className="sr-only">Loading posts</span>
-    <div className="loading-spinner" aria-hidden="true">
-      Loading...
+import React from 'react';
+import './LoadingSpinner.css';
+
+export const LoadingSpinner = () => {
+  return (
+    <div className="loadingSpinner">
+      <div className="loadingSpinner-circle"></div>
     </div>
-  </div>
-);
+  );
+};

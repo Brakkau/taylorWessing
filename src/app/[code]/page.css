@@ -1,44 +1,20 @@
 .client-detail-container {
   min-height: 100vh;
-  background-color: rgb(243 244 246);
-  padding: 1rem;
 }
 
 .detail-card {
   background-color: white;
   box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
   border-radius: 0.5rem;
-  padding: 1rem;
 }
 
 .detail-card + .detail-card {
   margin-top: 1rem;
 }
 
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1rem;
-}
-
 .page-title {
   font-size: 1.25rem;
   font-weight: 700;
-}
-
-.button {
-  padding: 0.5rem 1rem;
-  background-color: rgb(229 231 235);
-  border-radius: 0.5rem;
-}
-
-.button:hover {
-  background-color: rgb(209 213 219);
-}
-
-.button + .button {
-  margin-left: 0.5rem;
 }
 
 .client-info-grid {

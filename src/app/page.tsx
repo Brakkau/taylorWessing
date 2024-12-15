@@ -1,11 +1,12 @@
 import styles from '@/styles/page.module.css';
-import { SearchableClientList } from '@/components/common/SearchableClientList/SearchableClientList';
-import { mockClientDetailsList } from './api/mockData';
+import { Main } from '@/components/container/main/Main';
 
-export default async function Home() {
+const Home = () => {
   return (
     <div className={styles.page}>
-      <SearchableClientList clients={mockClientDetailsList} />
+      <Main />
     </div>
   );
-}
+};
+
+export default Home;

@@ -1,8 +1,46 @@
-export interface Client {
-  id: number;
+export type Address = {
+  addressLine1: string;
+  addressLine2: string;
+  city: string;
+  county: string;
+  postcode: string;
+};
+
+export type Person = {
   title: string;
-  body: string;
-}
+  firstName: string;
+  lastName: string;
+  preferredName: string;
+  email: string;
+  phone: string;
+};
+
+export type Client = {
+  clientId: string;
+  name: string;
+  code: string;
+  description: string;
+  inceptionDate: string;
+  address: Address;
+  people: Person[];
+  matterCount: number;
+};
+
+export type ClientList = {
+  clientId: string;
+  code: string;
+  inception: string;
+  matterCount: number;
+  name: string;
+};
+
+export type Matter = {
+  clientId: string;
+  matterId: string;
+  matterName: string;
+  matterCode: string;
+  matterDate: string;
+};
 
 export interface ItemProps {
   client: Client;

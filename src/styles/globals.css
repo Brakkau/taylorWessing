@@ -28,3 +28,61 @@ a {
     color-scheme: dark;
   }
 }
+
+h1 {
+  width: 100%;
+  font-size: 60px;
+  padding-right: 40%;
+  line-height: 1.05;
+  margin-bottom: 0;
+}
+
+h2 {
+  font-size: 40px;
+  font-weight: 700;
+  line-height: 50px;
+  padding-left: 12px;
+  margin-bottom: 64px;
+  border-left: 4px solid #0c8;
+  padding-left: 10px;
+  margin-right: auto;
+  margin-bottom: 24px;
+}
+
+.no-results {
+  text-align: center;
+  padding: 2rem;
+  color: #666;
+  font-size: 1.125rem;
+}
+
+.results-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #f8f9fa;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+.results-title {
+  font-size: 20px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.results-text {
+  font-size: 16px;
+  color: #666;
+}
+
+.clientData-info-grid {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  row-gap: 10px;
+  margin-top: 1rem;
+}

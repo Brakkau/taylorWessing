@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState } from 'react';
 import './Table.css';
 
@@ -11,12 +13,9 @@ interface TableProps<T> {
   data: T[];
   columns: Column<T>[];
   onRowClick?: (item: T) => void;
-  enablePagination?: boolean;
   enableSort?: boolean;
   rowsPerPage?: number;
   currentPage?: number;
-  totalPages?: number;
-  onPageChange?: (page: number) => void;
   customSort?: (a: T, b: T, column: keyof T, order: 'asc' | 'desc') => number;
 }
 
@@ -24,17 +23,11 @@ export const Table = <T,>({
   data,
   columns,
   onRowClick,
-  enablePagination = false,
   enableSort = false,
-  rowsPerPage = 10,
-  currentPage = 1,
-  totalPages,
-  onPageChange,
   customSort,
 }: TableProps<T>) => {
   const [sortColumn, setSortColumn] = useState<keyof T | null>(null);
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
-
   const handleSort = (column: keyof T) => {
     if (!enableSort) return;
 
@@ -62,13 +55,6 @@ export const Table = <T,>({
         })
       : data;
 
-  const displayData = enablePagination
-    ? sortedData.slice(
-        (currentPage - 1) * rowsPerPage,
-        currentPage * rowsPerPage
-      )
-    : sortedData;
-
   return (
     <div className="table-container">
       <table className="table">
@@ -91,7 +77,7 @@ export const Table = <T,>({
           </tr>
         </thead>
         <tbody>
-          {displayData.map((item, index) => (
+          {sortedData.map((item, index) => (
             <tr
               key={index}
               onClick={() => onRowClick && onRowClick(item)}
@@ -104,26 +90,6 @@ export const Table = <T,>({
           ))}
         </tbody>
       </table>
-
-      {enablePagination && onPageChange && (
-        <div className="pagination">
-          <button
-            onClick={() => onPageChange(currentPage - 1)}
-            disabled={currentPage === 1}
-          >
-            Previous
-          </button>
-          <span>
-            Page {currentPage} of {totalPages}
-          </span>
-          <button
-            onClick={() => onPageChange(currentPage + 1)}
-            disabled={currentPage === totalPages}
-          >
-            Next
-          </button>
-        </div>
-      )}
     </div>
   );
 }

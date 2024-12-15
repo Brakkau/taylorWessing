@@ -1,31 +1,45 @@
-"use client";
+'use client';
 
-import React, { useId } from 'react';
 import './SearchBar.css';
+import React, { useId, useState } from 'react';
+import { Button } from '../Button/Button';
 
 interface SearchBarProps {
-  onSearch: (searchTerm: string) => void;
-  initialValue?: string;
+  searchTerm: string;
+  setSearchTerm: (value: string) => void;
 }
 
 export const SearchBar: React.FC<SearchBarProps> = ({
-  onSearch,
-  initialValue = '',
+  searchTerm,
+  setSearchTerm,
 }) => {
   const searchId = useId();
+  const [localSearchTerm, setLocalSearchTerm] = useState(searchTerm);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setLocalSearchTerm(e.target.value);
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setSearchTerm(localSearchTerm);
+  };
 
   return (
-    <div className="search-bar" role="search">
+    <form className="search-bar" role="search" onSubmit={handleSubmit}>
       <input
         id={searchId}
         type="search"
         placeholder="Search for clients..."
-        onChange={(e) => onSearch(e.target.value)}
         className="search-input"
-        defaultValue={initialValue}
+        value={localSearchTerm}
+        onChange={handleChange}
         autoComplete="off"
         spellCheck="false"
       />
-    </div>
+      <Button type="submit" variant="secondary">
+        Search
+      </Button>
+    </form>
   );
 };

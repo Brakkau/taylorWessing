@@ -1,15 +1,11 @@
-import { Column, Table } from "@/components/common/Table/Table";
+import { Column, Table } from '@/components/common/Table/Table';
+import { Person } from '@/types/types';
 
-// For the contacts table in client details
-interface Contact {
-  name: string;
-  email: string;
-  phone: string;
-}
-
-export const ContactsTable: React.FC<{ contacts: Contact[] }> = ({ contacts }) => {
-  const columns: Column<Contact>[] = [
-    { key: 'name', header: 'Name' },
+export const ContactsTable: React.FC<{ contacts: Person[] }> = ({
+  contacts,
+}) => {
+  const columns: Column<Person>[] = [
+    { key: 'preferredName', header: 'Name' },
     { key: 'email', header: 'Email' },
     { key: 'phone', header: 'Phone' },
   ];
@@ -18,7 +14,6 @@ export const ContactsTable: React.FC<{ contacts: Contact[] }> = ({ contacts }) =
     <Table
       data={contacts}
       columns={columns}
-      enablePagination={false}
       enableSort={false}
     />
   );

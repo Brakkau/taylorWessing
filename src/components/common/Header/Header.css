@@ -1,0 +1,19 @@
+@import '../../../styles/globals.css';
+
+.header {
+  display: flex;
+  flex-direction: column;
+  height: 320px;
+  min-height: 205px;
+  padding: 20px 58px;
+  position: relative;
+  color: #fff;
+  background-color: #0f1c44;
+  justify-content: space-between;
+  align-items: flex-start;
+  background: url('../../../assets/banner.webp');
+}
+
+h1 {
+  padding-top: 20px;
+}
