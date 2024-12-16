@@ -19,7 +19,7 @@ export const ContactsTable: React.FC<{ contacts: Person[] }> = ({
   );
 };
 
-// For the matters table
+
 interface Matter {
   code: string;
   name: string;

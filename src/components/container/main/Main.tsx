@@ -8,10 +8,8 @@ import { useState } from 'react';
 import { useClientList } from '@/hooks/useClientList';
 import { Column } from '@/components/common/Table/Table';
 import { ClientList } from '@/types/types';
-import { useRouter } from 'next/navigation';
 
 export const Main = () => {
-  const router = useRouter;
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState();
   const rowsPerPage = 10;

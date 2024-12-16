@@ -5,7 +5,6 @@ import styles from '@/styles/page.module.css';
 import { LoadingSpinner } from '@/components/common/LoadingSpinner/LoadingSpinner';
 import { Client, Matter } from '@/types/types';
 import { useRouter } from 'next/navigation';
-// import { useClientAndMatterData } from '@/hooks/useClientAndMatterData';
 import { ContactsTable } from '../Tables/Tables';
 import { Button } from '@/components/common/Button/Button';
 import { useMatterList } from '@/hooks/useMatterList';
@@ -60,7 +59,7 @@ export const ClientDetailPage = ({ clientData }: ClientDetailPageProps) => {
         </Button>
       </Header>
       <main className={styles.main}>
-        <div className="detail-card">
+        <  div className="detail-card">
           <div className="clientData-info-grid">
             <div>
               <h2 className="info-label">Client Name</h2>

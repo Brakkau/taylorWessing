@@ -36,7 +36,6 @@ export const ItemList = ({
     if (rowOnClick === 'matter' && matterData) {
       return handleOpen;
     }
-    // It's good practice to have a default return value
     return () => {};
   };
   return (
